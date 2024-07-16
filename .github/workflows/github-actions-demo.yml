@@ -28,4 +28,4 @@ jobs:
       # Output the name of the event that triggered the workflow
       - name: Output the name of the event that triggered the workflow
         run: echo "event name is:" ${{ github.event_name }} 
-             echo "event type is:" ${{ github.event.action }}
+             echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
