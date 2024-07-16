@@ -2,15 +2,14 @@
 
 name: GitHub Actions Demo
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ main ]
+    paths-ignore: [.github/**]
   pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [ main ]
+  schedule:
+    - cron: '15 6 * * 0'
   workflow_dispatch:
     inputs:
         environment:
@@ -18,19 +17,17 @@ on:
           type: environment
           required: true
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  Build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - run: |
+          echo "🎉 The job was triggered by event: ${{ github.event_name }}"
+          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ."
 
-      # Output the name of the event that triggered the workflow
-      - name: Output the name of the event that triggered the workflow
-        run: echo "event name is:" ${{ github.event_name }} 
-             echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+      - uses: actions/checkout@v3.3.0
+
+      - name: List files in the repository
+        run: |
+          echo "The repository ${{ github.repository }} contains the following files:"
+          tree
